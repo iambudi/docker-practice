@@ -125,19 +125,19 @@ docker compose up --build # build and run
 
 ## Tips: Build Image Faster
 
-One of the problem of build go app using docker is every time `go build` run, it would redownload all the dependencies and slow down the build process.
+One of the problem of building go app using docker is every time `go build` run, it would redownload all the dependencies and slow down the build process.
 
 The solution is using Docker Build Kit. It enables higher performance docker builds and caching possibility to decrease build times and increase productivity for free.
 
 1. Add `# syntax=docker/dockerfile:1.4` in the first line of docker file
 2. Put env var `DOCKER_BUILDKIT=1` before calling `docker build` or `docker compose --build`
-> To apply globally put the env variable into shell profile (bashrc/zshrc): `export DOCKER_BUILDKIT=1`
+    > To apply the var globally put it in our shell profile (.bashrc or .zshrc): `export DOCKER_BUILDKIT=1`
 3. Use statement `RUN --mount=type=cache,mode=0755,target={target folder} {buildcommand}`
 
 See [Reference](https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md) for the detail
 
 ## Go Fiber Prefork
-When running app with go fiber prefork enabled, the app will stop by  displaying `exit status 1`. To encounter this issue add parameter `--pid=host` inside `docker run` as referenced [here](https://github.com/gofiber/fiber/issues/1036#issuecomment-738147598). 
+When running app with go fiber prefork enabled, the app will stop by displaying `exit status 1`. To encounter this issue, add parameter `--pid=host` inside `docker run` as referenced [here](https://github.com/gofiber/fiber/issues/1036#issuecomment-738147598). 
 
 ```bash
 docker run -p 8080:8081 --pid=host -it myapp

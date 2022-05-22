@@ -70,8 +70,8 @@ Main purpose of Docker Compose itself is for running multiple containers as a si
 
 1. Create file `docker-compose.yml`
 2. Define version and services
-3. Under services, create service with custom name. Note container_name must be specified otherwise if there's already image with the service name it will build new image with suffix {servicename}
-4. Build can have context. It's enough to specify just dot to automatically use current work directory and default Dockerfile name
+3. Under services, create service with custom name. In this project we use `app`
+4. Build can have context. It's enough to specify just `.` to automatically use current work directory and default Dockerfile name
 `build: .`
 5. To run/stop container: 
 ```bash

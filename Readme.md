@@ -1,4 +1,5 @@
 # Docker Practice: Running Go app with Docker 
+Step by step on how to use docker to build and run Go app
 
 ## Dockerfile 
 It is used to create Docker Image
@@ -6,7 +7,8 @@ It is used to create Docker Image
 1. Create a file named [Dockerfile](Dockerfile)
 
     A simple Dockerfile for a go app could be like this:
-    ```docker
+
+    ```Dockerfile
     # Choose golang image we want to use
     FROM golang:1.18-bullseye
     # Set current work directory
@@ -29,14 +31,10 @@ To create container from the created image, run
 `docker run -p 8080:8081 -it myapp`
 > -p 8080:8081 - This exposes our application which is running on port 8081 within our container on http://localhost:8080 on our host/local machine.
 
-### Exposing and Publishing Ports 
+### Exposing and Publishing Ports it
+In Dockerfile, **exposing ports** does not bind the port to the host's network interfaces. The port won't be accessible outside the container. This only is a simple way of checking which ports the software inside a container is listening on. To check run `docker ps`
 
-In Dockerfile, expose ports does not bind the port to the host's network interfaces. The port won't be accessible outside the container. 
-
-This only gives you a simple way of checking which ports the software inside a container is listening on. To check run `docker ps`
-
-Publishing ports make it accessible from outside the container with the -p flag for the docker run command.
-
+**Publishing ports** make it accessible from outside the container with the -p flag for the docker run command.
 `docker run -d -p 80 myapp` make the host os can access `http://localhost`
 
 see [Reference](https://www.howtogeek.com/devops/whats-the-difference-between-exposing-and-publishing-a-docker-port/) for more information.
@@ -46,7 +44,7 @@ With multi-stage builds, Dockerfile can be splitted into multiple sections. Each
 
 Stages are built sequentially and can reference their predecessors, so the output of one layer can be copied into the next layer.
 
-```docker
+```Dockerfile
 # syntax=docker/dockerfile:1.4
 
 #### First stage
@@ -127,17 +125,16 @@ docker compose up --build # build and run
 
 ## Tips: Build Image Faster
 
-One of the problem of build go app using docker is every time go build run it would redownload all the dependency so it slows down the build process.
+One of the problem of build go app using docker is every time `go build` run, it would redownload all the dependencies and slow down the build process.
 
-Docker Build Kit enables higher performance docker builds and caching possibility to decrease build times and increase productivity for free.
+The solution is using Docker Build Kit. It enables higher performance docker builds and caching possibility to decrease build times and increase productivity for free.
 
-Simply add `# syntax=docker/dockerfile:1.4` in the first line of docker file and put env var `DOCKER_BUILDKIT=1` before calling `docker build` or `docker compose --build`.
-
-To apply globally put the env variable into shell profile (bashrc/zshrc): `export DOCKER_BUILDKIT=1`
+1. Add `# syntax=docker/dockerfile:1.4` in the first line of docker file
+2. Put env var `DOCKER_BUILDKIT=1` before calling `docker build` or `docker compose --build`
+> To apply globally put the env variable into shell profile (bashrc/zshrc): `export DOCKER_BUILDKIT=1`
+3. Use statement `RUN --mount=type=cache,mode=0755,target={target folder} {buildcommand}`
 
 See [Reference](https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md) for the detail
-
-Build
 
 ## Go Fiber Prefork
 When running app with go fiber prefork enabled, the app will stop by  displaying `exit status 1`. To encounter this issue add parameter `--pid=host` inside `docker run` as referenced [here](https://github.com/gofiber/fiber/issues/1036#issuecomment-738147598). 

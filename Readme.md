@@ -1,5 +1,5 @@
 # Docker Practice: Running Go app with Docker 
-Step by step on how to use docker to build and run Go app
+Step by step on how to use docker to build and run Go app.
 
 ## Dockerfile 
 It is used to create Docker Image
@@ -31,7 +31,7 @@ To create container from the created image, run
 `docker run -p 8080:8081 -it myapp`
 > -p 8080:8081 - This exposes our application which is running on port 8081 within our container on http://localhost:8080 on our host/local machine.
 
-### Exposing and Publishing Ports it
+### Exposing and Publishing Ports
 In Dockerfile, **exposing ports** does not bind the port to the host's network interfaces. The port won't be accessible outside the container. This only is a simple way of checking which ports the software inside a container is listening on. To check run `docker ps`
 
 **Publishing ports** make it accessible from outside the container with the -p flag for the docker run command.

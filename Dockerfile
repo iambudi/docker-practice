@@ -18,7 +18,7 @@ WORKDIR "$APP_HOME"
 # Copy just the dep files
 COPY go.mod go.sum ./
 
-# Copy everything in the project root directory
+# Or Copy everything in the project root directory
 # into /app directory
 COPY . .
 
@@ -47,10 +47,11 @@ RUN --mount=type=cache,mode=0755,target=/go/pkg/mod \
 # when using this target image, make sure to disable CGO when compiling go app 
 # to avaoid file/dir not found due missing libs for interoperability with C libraries
 FROM gcr.io/distroless/static
-
+# set timezone
+ENV TZ=Asia/Jakarta
 COPY --from=builder /app/myapp /
 # Expose port, just for info. it does not map to existing go fiber port
-# EXPOSE 8010
+EXPOSE 3000
 
 # If dont want to run automatically on container creation 
 # comment the entry point

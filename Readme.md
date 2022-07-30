@@ -31,6 +31,25 @@ To create container from the created image, run
 `docker run -p 8080:8081 -it myapp`
 > -p 8080:8081 - This exposes our application which is running on port 8081 within our container on http://localhost:8080 on our host/local machine.
 
+### Set Timezone
+1. Declaring env `TZ=Asia/Jakarta` on docker file
+Some image might require tzdata package to be installed
+2. On Docker run with arg `-e TZ=Asia/Jakarta` or 
+3. Mapping timezone and localtime from the docker host volume:
+```bash
+docker run -v /etc/timezone:/etc/timezone:ro \
+    -v /etc/localtime:/etc/localtime:ro -it  \
+    docker-practice-api:latest-dev
+```
+
+When using docker composer:
+```yaml
+volumes:
+- /etc/timezone:/etc/timezone:ro
+- /etc/localtime:/etc/localtime:ro
+```
+> Note: mapping /etc/timezone might not work on macOS
+
 ### Exposing and Publishing Ports
 In Dockerfile, **exposing ports** does not bind the port to the host's network interfaces. The port won't be accessible outside the container. This only is a simple way of checking which ports the software inside a container is listening on. To check run `docker ps`
 
@@ -144,7 +163,7 @@ docker run -p 8080:8081 --pid=host -it myapp
 ```
 
 For docker compose, specify it under the app service. 
-```yml
+```yaml
 service:
     app:
         ...

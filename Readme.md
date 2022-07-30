@@ -31,33 +31,6 @@ To create container from the created image, run
 `docker run -p 8080:8081 -it myapp`
 > -p 8080:8081 - This exposes our application which is running on port 8081 within our container on http://localhost:8080 on our host/local machine.
 
-### Set Timezone
-1. Declaring env `TZ=Asia/Jakarta` on docker file
-Some image might require tzdata package to be installed
-2. On Docker run with arg `-e TZ=Asia/Jakarta` or 
-3. Mapping timezone and localtime from the docker host volume:
-```bash
-docker run -v /etc/timezone:/etc/timezone:ro \
-    -v /etc/localtime:/etc/localtime:ro -it  \
-    docker-practice-api:latest-dev
-```
-
-When using docker composer:
-```yaml
-volumes:
-- /etc/timezone:/etc/timezone:ro
-- /etc/localtime:/etc/localtime:ro
-```
-> Note: mapping /etc/timezone might not work on macOS
-
-### Exposing and Publishing Ports
-In Dockerfile, **exposing ports** does not bind the port to the host's network interfaces. The port won't be accessible outside the container. This only is a simple way of checking which ports the software inside a container is listening on. To check run `docker ps`
-
-**Publishing ports** make it accessible from outside the container with the -p flag for the docker run command.
-`docker run -d -p 80 myapp` make the host os can access `http://localhost`
-
-see [Reference](https://www.howtogeek.com/devops/whats-the-difference-between-exposing-and-publishing-a-docker-port/) for more information.
-
 ### Multi-Stage Build
 With multi-stage builds, Dockerfile can be splitted into multiple sections. Each stage has its own FROM statement. So it can involve multiple image in the builds. 
 
@@ -103,6 +76,33 @@ docker compose run {service name} {shell-command}
 # example 
 docker compose run myapp uname
 ```
+
+## Set Timezone
+1. Declare env `TZ=Asia/Jakarta` on docker file.
+*Some image might require tzdata package to be installed*
+2. On Docker run with arg `-e TZ=Asia/Jakarta` or 
+3. Mapping timezone and localtime from the docker host volume:
+```bash
+docker run -v /etc/timezone:/etc/timezone:ro \
+    -v /etc/localtime:/etc/localtime:ro -it  \
+    docker-practice-api:latest-dev
+```
+
+When using docker compose:
+```yaml
+volumes:
+- /etc/timezone:/etc/timezone:ro
+- /etc/localtime:/etc/localtime:ro
+```
+> Note: mapping /etc/timezone might not work on macOS
+
+## Exposing and Publishing Ports
+In Dockerfile, **exposing ports** does not bind the port to the host's network interfaces. The port won't be accessible outside the container. This only is a simple way of checking which ports the software inside a container is listening on. To check run `docker ps`
+
+**Publishing ports** make it accessible from outside the container with the -p flag for the docker run command.
+`docker run -d -p 80 myapp` make the host os can access `http://localhost`
+
+see [Reference](https://www.howtogeek.com/devops/whats-the-difference-between-exposing-and-publishing-a-docker-port/) for more information.
 
 ## Entry Point
 It is intruction used to specify the executable which should run when a container is started from a Docker image.

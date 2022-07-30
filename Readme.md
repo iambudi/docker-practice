@@ -142,7 +142,7 @@ docker compose build
 docker compose up --build # build and run 
 ```
 
-## Tips: Build Image Faster
+## 💡 Tips: Build Image Faster
 
 One of the problem of building go app using docker is every time `go build` run, it would redownload all the dependencies and slow down the build process.
 
